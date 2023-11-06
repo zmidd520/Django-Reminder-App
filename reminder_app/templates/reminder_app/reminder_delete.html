@@ -1,0 +1,18 @@
+{% extends 'reminder_app/base_template.html' %}
+
+
+<!-- Replace block content in base_template.html -->
+{% block content %}
+<p>Are you sure you want to delete "{{ reminder.title }}"?</p>
+
+
+<form action="{% url 'delete_reminder' reminder.user.id reminder.id %}" method="POST">
+
+    {% csrf_token %}
+    <a class="btn btn-primary" href="{{ reminder.user.get_absolute_url }}" role="button">Cancel</a>
+    
+    <input class="btn btn-danger" type="submit" name="Submit">
+
+</form>
+
+{% endblock %}

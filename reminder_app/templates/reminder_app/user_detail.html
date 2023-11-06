@@ -1,0 +1,31 @@
+{% extends 'reminder_app/base_template.html' %}
+
+
+{% block content %}
+<h1>{{ user.name }}</h1>
+
+
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>About:</strong> {{ user.about }}</p>
+
+<h2>{{ user.name }}'s Reminders</h2>
+<a class="btn btn-primary" href="{% url 'create_reminder' user.id %}" role="button">New</a>
+
+{% if user_reminders %}
+<ul class="list-group">
+    {% for reminder in user_reminders %}
+    {% if reminder.user.id == user.id %}
+    <li class="list-group-item bg-black text-white">
+        {{ reminder.title }}:
+            <a class="btn btn-primary" href="{{ reminder.get_absolute_url }}" role="button">View</a>
+            <a class="btn btn-info" href="{% url 'update_reminder' reminder.user.id reminder.id %}" role="button">Update</a>
+            <a class="btn btn-danger" href="{% url 'delete_reminder' reminder.user.id reminder.id %}" role="button">Delete</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% else %}
+    <p>No reminders at this time.</p>
+{% endif %}
+
+{% endblock %}

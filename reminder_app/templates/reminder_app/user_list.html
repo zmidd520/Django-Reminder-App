@@ -1,0 +1,17 @@
+{% extends 'reminder_app/base_template.html' %}
+
+
+{% block content %}
+<h1>Users</h1>
+{% if user_list %}
+    <ul class="list-group">
+        {% for user in user_list %}
+        <li class="list-group-item bg-black">
+            <a href="{{ user.get_absolute_url }}">{{ user.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>There are no users registered.</p>
+{% endif %}
+{% endblock %}
