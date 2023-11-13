@@ -21,10 +21,11 @@ from reminder_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('reminder_app.urls')),
-    path('users/', views.UserListView.as_view(), name= 'users'),
-    path('users/<int:pk>', views.UserDetailView.as_view(), name= 'user-detail'),
+    path('users/', views.AccountListView.as_view(), name= 'accounts'),
+    path('users/<int:pk>', views.AccountDetailView.as_view(), name= 'account-detail'),
     path('reminders/<int:pk>', views.ReminderDetailView.as_view(), name= 'reminder-detail'),
-    path('users/<int:user_id>/create_reminder/', views.createReminder, name= 'create_reminder'),
-    path('users/<int:user_id>/update_reminder/<int:reminder_id>', views.updateReminder, name= 'update_reminder'),
-    path('users/<int:user_id>/delete_reminder/<int:reminder_id>', views.deleteReminder, name= 'delete_reminder'),
+    path('users/<int:account_id>/create_reminder/', views.createReminder, name= 'create_reminder'),
+    path('users/<int:account_id>/update_reminder/<int:reminder_id>', views.updateReminder, name= 'update_reminder'),
+    path('users/<int:account_id>/delete_reminder/<int:reminder_id>', views.deleteReminder, name= 'delete_reminder'),
+    path('accounts', include('django.contrib.auth.urls')),
 ]

@@ -3,11 +3,11 @@
 
 {% block content %}
 <h1>Users</h1>
-{% if user_list %}
+{% if account_list %}
     <ul class="list-group">
-        {% for user in user_list %}
+        {% for account in account_list %}
         <li class="list-group-item bg-black">
-            <a href="{{ user.get_absolute_url }}">{{ user.name }}</a>
+            <a href="{{ account.get_absolute_url }}">{{ account.name }}</a>
         </li>
         {% endfor %}
     </ul>

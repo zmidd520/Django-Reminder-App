@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
-class User(models.Model):
+class Account(models.Model):
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
     about = models.TextField(blank=True)
@@ -11,7 +11,7 @@ class User(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('user-detail', args=[str(self.id)])
+        return reverse('account-detail', args=[str(self.id)])
 
 class Reminder(models.Model):
     # choices for date/time-related fields
@@ -19,7 +19,7 @@ class Reminder(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(default=None)
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.title

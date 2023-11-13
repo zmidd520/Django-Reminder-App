@@ -11,43 +11,43 @@ class ReminderListView(generic.ListView):
 class ReminderDetailView(generic.DetailView):
     model = Reminder
 
-class UserListView(generic.ListView):
-    model = User
+class AccountListView(generic.ListView):
+    model = Account
 
-class UserDetailView(generic.DetailView):
-    model = User
+class AccountDetailView(generic.DetailView):
+    model = Account
 
     def get_context_data(self, **kwargs):
             # Call the base implementation first to get the context
-            context = super(UserDetailView, self).get_context_data(**kwargs)
+            context = super(AccountDetailView, self).get_context_data(**kwargs)
             # Create any data and add it to the context
-            context['user_reminders'] = Reminder.objects.all()
+            context['account_reminders'] = Reminder.objects.all()
             return context
 
 # create a new reminder that is tied to a specific user
-def createReminder(request, user_id):
+def createReminder(request, account_id):
      form = ReminderForm()
-     user = User.objects.get(pk=user_id)
+     account = Account.objects.get(pk=account_id)
 
      if request.method == "POST":
           # make dictionary with user id and reminder data
           reminder_data = request.POST.copy()
-          reminder_data['user_id'] = user_id
+          reminder_data['account_id'] = account_id
 
           # get form data
           form = ReminderForm(reminder_data)
 
           if form.is_valid():
                reminder = form.save(commit=False)
-               reminder.user = user
+               reminder.account = account
                reminder.save()
-          return redirect('user-detail', user_id)
+          return redirect('account-detail', account_id)
      
      context = {'form': form}
      return render(request, 'reminder_app/reminder_form.html', context)
 
 # update an existing reminder
-def updateReminder(request, user_id, reminder_id):
+def updateReminder(request, account_id, reminder_id):
        # get desired reminder from the database
        reminder = Reminder.objects.get(pk=reminder_id)
        # access the form for the specified reminder
@@ -60,13 +60,13 @@ def updateReminder(request, user_id, reminder_id):
               if form.is_valid():
                      form.save()
 
-              return redirect('user-detail', user_id)
+              return redirect('account-detail', account_id)
 
        context = {'form': form}
        return render(request, 'reminder_app/reminder_form.html', context)
 
 # deletes an existing reminder
-def deleteReminder(request, user_id, reminder_id):
+def deleteReminder(request, account_id, reminder_id):
        # get the desired reminder from the database
        reminder = Reminder.objects.get(pk=reminder_id)
        
@@ -75,7 +75,7 @@ def deleteReminder(request, user_id, reminder_id):
               reminder.delete()
 
               # redirect user to the detail page for the user
-              return redirect('user-detail', user_id)
+              return redirect('account-detail', account_id)
        
        # add info about the project to the HTML context
        context = {'reminder': reminder}
@@ -84,5 +84,5 @@ def deleteReminder(request, user_id, reminder_id):
 
 
 def index(request):
-    reminders = Reminder.objects.select_related('user').all()
+    reminders = Reminder.objects.select_related('account').all()
     return render( request, 'reminder_app/index.html', {'reminders':reminders})

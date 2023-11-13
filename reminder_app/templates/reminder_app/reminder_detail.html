@@ -6,6 +6,6 @@
 
 <p><strong>Date:</strong> {{ reminder.date }}</p>
 <p><strong>Description:</strong> {{ reminder.description }}</p>
-<p><strong>User:</strong><a href="{{ reminder.user.get_absolute_url }}"> {{ reminder.user.name }} </a></p>
+<p><strong>User:</strong><a href="{{ reminder.account.get_absolute_url }}"> {{ reminder.account.name }} </a></p>
 
 {% endblock %}
