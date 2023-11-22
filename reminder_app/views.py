@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from django.views import generic
 from .models import *
 from .forms import *
+from django.contrib import messages
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+from .decorator import allowed_users
 
 # Create your views here.
 class ReminderListView(generic.ListView):
@@ -25,6 +29,8 @@ class AccountDetailView(generic.DetailView):
             return context
 
 # create a new reminder that is tied to a specific user
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user'])
 def createReminder(request, account_id):
      form = ReminderForm()
      account = Account.objects.get(pk=account_id)
@@ -47,6 +53,8 @@ def createReminder(request, account_id):
      return render(request, 'reminder_app/reminder_form.html', context)
 
 # update an existing reminder
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user'])
 def updateReminder(request, account_id, reminder_id):
        # get desired reminder from the database
        reminder = Reminder.objects.get(pk=reminder_id)
@@ -66,6 +74,8 @@ def updateReminder(request, account_id, reminder_id):
        return render(request, 'reminder_app/reminder_form.html', context)
 
 # deletes an existing reminder
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user'])
 def deleteReminder(request, account_id, reminder_id):
        # get the desired reminder from the database
        reminder = Reminder.objects.get(pk=reminder_id)
@@ -80,9 +90,46 @@ def deleteReminder(request, account_id, reminder_id):
        # add info about the project to the HTML context
        context = {'reminder': reminder}
        return render(request, 'reminder_app/reminder_delete.html', context)
+
+# user registration page
+def registerPage(request):
+      form = CreateUserForm()
+
+      if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                  user = form.save()
+                  username = form.cleaned_data.get('username')
+                  group = Group.objects.get(name='user')
+                  user.groups.add(group)
+                  account = Account.objects.create(user=user,)
+                  account.save()
+
+                  messages.success(request, 'Account was created for ' + username)
+                  return redirect('login')
+       
+      context = {'form': form}
+      return render(request, 'registration/register.html', context)
+
+# user info page
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user'])
+def userPage(request):
+       account = request.user.account
+       form = AccountForm(instance = account)
+       print('account', account)
+       reminders = Reminder.objects.all()
+
+       if request.method == 'POST':
+            form = AccountForm(request.POST, request.FILES, instance=account)
+            if form.is_valid():
+                  form.save()
+       context = {'form': form}
+       return render(request, 'reminder_app/user.html', context)
         
 
-
+# home page
 def index(request):
-    reminders = Reminder.objects.select_related('account').all()
-    return render( request, 'reminder_app/index.html', {'reminders':reminders})
+    reminders = Reminder.objects.all()
+    context = {'reminders': reminders}
+    return render( request, 'reminder_app/index.html', context)

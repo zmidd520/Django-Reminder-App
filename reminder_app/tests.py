@@ -12,7 +12,7 @@ class ReminderAndUrlTests(TestCase):
         self.assertEqual(self.post.title, "test reminder")
         self.assertEqual(self.post.date, "2023-12-13")
         self.assertEqual(self.post.description, "t e s t")
-        self.assertEqual(self.post.user, self.user)
+        self.assertEqual(self.post.account, self.user)
 
     def test_index_url_exists_and_template_correct(self):
         response = self.client.get(reverse("index"))

@@ -4,9 +4,29 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
-<h1>Your Reminders</h1>
+{% if user.is_authenticated %}
+<h1>Welcome, {{user}}</h1>
+<h2>Your Reminders</h2>
 
+    {% if reminders %}
+    <ul class="list-group">
+        {% for reminder in reminders %}
+        {% if reminder.account.id == user.account.id %}
+        <li class="list-group-item bg-black text-white">
+            {{ reminder.title }}:
+                <a class="btn btn-primary" href="{{ reminder.get_absolute_url }}" role="button">View</a>
+                <a class="btn btn-info" href="{% url 'update_reminder' reminder.account.id reminder.id %}" role="button">Update</a>
+                <a class="btn btn-danger" href="{% url 'delete_reminder' reminder.account.id reminder.id %}" role="button">Delete</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No reminders at this time.</p>
+    {% endif %}
 
-<h2>Coming Soon</h2>
+{% else %}
+<p>Start getting organized today, <a href="{% url 'register_page' %}">Click here to create an account</a></p>
 
+{% endif %}
 {% endblock %}
