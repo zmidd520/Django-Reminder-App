@@ -17,10 +17,18 @@ class Account(models.Model):
         return reverse('account-detail', args=[str(self.id)])
 
 class Reminder(models.Model):
-    # choices for date/time-related fields
+    # choices for reminder color
+    COLORS = (
+        ('bg-black text-white', 'Black'),
+        ('list-group-item-primary', 'Blue'),
+        ('list-group-item-success', 'Green'),
+        ('list-group-item-danger', 'Red'),
+        ('list-group-item-warning', 'Yellow')
+    )
 
     title = models.CharField(max_length=100)
     date = models.DateField(default=None)
+    color = models.CharField(max_length=100, choices=COLORS, default='bg-black text-white')
     description = models.TextField()
     account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
 

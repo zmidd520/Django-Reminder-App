@@ -38,5 +38,5 @@ urlpatterns = [
     # registration pages
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/register/', views.registerPage, name='register_page'),
-    path('user/', views.userPage, name='user-page'),
+    path('accounts/profile/', views.userPage, name='user-page'),
 ]

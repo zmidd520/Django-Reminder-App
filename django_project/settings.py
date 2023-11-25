@@ -40,6 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reminder_app',
     'bootstrap5',
+    'django_nose',
+]
+
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=reminder_app',
 ]
 
 MIDDLEWARE = [

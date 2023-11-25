@@ -9,7 +9,9 @@
 <p><strong>About:</strong> {{ account.about }}</p>
 
 <h2>{{ account.name }}'s Reminders</h2>
+{% if user.account.id == account.id %}
 <a class="btn btn-primary" href="{% url 'create_reminder' account.id %}" role="button">New</a>
+{% endif %}
 
 {% if account_reminders %}
 <ul class="list-group">
@@ -18,8 +20,10 @@
     <li class="list-group-item bg-black text-white">
         {{ reminder.title }}:
             <a class="btn btn-primary" href="{{ reminder.get_absolute_url }}" role="button">View</a>
+            {% if user.account.id == account.id %}
             <a class="btn btn-info" href="{% url 'update_reminder' reminder.account.id reminder.id %}" role="button">Update</a>
             <a class="btn btn-danger" href="{% url 'delete_reminder' reminder.account.id reminder.id %}" role="button">Delete</a>
+            {% endif %}
     </li>
     {% endif %}
     {% endfor %}

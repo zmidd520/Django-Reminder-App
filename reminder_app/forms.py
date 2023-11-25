@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class ReminderForm(ModelForm):
     class Meta: 
         model = Reminder 
-        fields = ('title', 'date', 'description')
+        fields = ('title', 'date', 'color', 'description')
 
 class CreateUserForm(UserCreationForm):
     class Meta:

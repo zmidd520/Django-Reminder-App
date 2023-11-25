@@ -6,17 +6,19 @@
 {% block content %}
 {% if user.is_authenticated %}
 <h1>Welcome, {{user}}</h1>
-<h2>Your Reminders</h2>
+<h2>Your Reminders <a class="btn btn-primary" href="{% url 'create_reminder' user.account.id %}" role="button">New Reminder</a></h2>
 
     {% if reminders %}
     <ul class="list-group">
         {% for reminder in reminders %}
         {% if reminder.account.id == user.account.id %}
-        <li class="list-group-item bg-black text-white">
-            {{ reminder.title }}:
+        <li class="list-group-item {{reminder.color}}">
+            <p><strong>{{ reminder.title }}</strong></p>
+            <p>{{ reminder.date }}
                 <a class="btn btn-primary" href="{{ reminder.get_absolute_url }}" role="button">View</a>
                 <a class="btn btn-info" href="{% url 'update_reminder' reminder.account.id reminder.id %}" role="button">Update</a>
                 <a class="btn btn-danger" href="{% url 'delete_reminder' reminder.account.id reminder.id %}" role="button">Delete</a>
+            </p>
         </li>
         {% endif %}
         {% endfor %}
@@ -27,6 +29,8 @@
 
 {% else %}
 <p>Start getting organized today, <a href="{% url 'register_page' %}">Click here to create an account</a></p>
+<p></p>
+<p>Have an account? <a href="{% url 'login' %}">Log in</a></p>
 
 {% endif %}
 {% endblock %}
