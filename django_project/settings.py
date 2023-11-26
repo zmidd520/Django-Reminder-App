@@ -41,9 +41,19 @@ INSTALLED_APPS = [
     'reminder_app',
     'bootstrap5',
     'django_nose',
+    'django_jenkins',
 ]
 
-#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+JENKINS_TEST_RUNNER = 'django_jenkins.runner.CITestSuiteRunner'
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes',
+    'django_jenkins.tasks.run_jslint',
+    'django_jenkins.tasks.run_csslint',
+    'django_jenkins.tasks.run_sloccount'
+)
 
 NOSE_ARGS = [
     '--with-coverage',

@@ -73,7 +73,7 @@ def updateReminder(request, account_id, reminder_id):
                      if form.is_valid():
                             form.save()
 
-                     return redirect('account-detail', account_id)
+                     return redirect('index')
 
               context = {'form': form}
               return render(request, 'reminder_app/reminder_form.html', context)
@@ -92,7 +92,7 @@ def deleteReminder(request, account_id, reminder_id):
                      reminder.delete()
 
                      # redirect user to the detail page for the user
-                     return redirect('account-detail', account_id)
+                     return redirect('index')
               
               # add info about the project to the HTML context
               context = {'reminder': reminder}
